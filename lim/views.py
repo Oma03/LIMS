@@ -26,8 +26,8 @@ class BookPatient(APIView):
         # department = Department.objects.get(department_id=req_department_id)
 
         # creating the patient object
-        firstname = request.POST.get('firstname')
         lastname = request.POST.get('lastname')
+        firstname = request.POST.get('firstname')
         age = request.POST.get('age')
         specimenchoice = request.POST.get('specimenchoice')
         testtype = request.POST.get('testtype')
