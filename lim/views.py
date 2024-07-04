@@ -29,17 +29,27 @@ class BookPatient(APIView):
         lastname = request.POST.get('lastname')
         firstname = request.POST.get('firstname')
         age = request.POST.get('age')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
         specimenchoice = request.POST.get('specimenchoice')
         testtype = request.POST.get('testtype')
-        pathologist = request.POST.get('pathologist')
+        referring_doctor = request.POST.get('referring_doctor')
         date = request.POST.get('date')
         time = request.POST.get('time')
 
-        appointment = Patient(patient_lname=lastname, patients_fname=firstname, age=age, specimen_choice=specimenchoice,
-                              test_type=testtype, pathologist_present=pathologist, date=date, time_e=time)
+        appointment = Patient(patient_lname=lastname, patients_fname=firstname, age=age, email=email, phone=phone,
+                              specimen_choice=specimenchoice, test_type=testtype, referring_doctor=referring_doctor,
+                              date=date, time_e=time)
         appointment.save()
+        try:
+            appointment2 = Sample(patient_lname=lastname, patients_fname=firstname, age=age, email=email, phone=phone,
+                                  sample_choice=specimenchoice, test_type=testtype)
+            appointment2.save()
+        except Exception as e:
+            return Response(data={'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(data={'appointment': appointment.__dict__}, status=status.HTTP_200_OK)
+        return Response(data={'appointment': appointment.__dict__, 'sample': appointment2.__dict__},
+                        status=status.HTTP_200_OK)
 
 
 # EditAppointment
